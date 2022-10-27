@@ -1,14 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from 'react';
+import { useQuery, gql } from '@apollo/client';
+import TodoCard from './components/TodoCard';
+import TodoContainer from './components/TodoContainer';
+import UserContainer from './components/UserContainer';
+
+const getAllUsers = gql`
+  query myQuery {
+    getAllUsers {
+      email
+    }
+  }
+`;
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { loading, error, data } = useQuery(getAllUsers);
 
-  return (
-    <div className="App">
-    </div>
-  )
+  if (loading) return <p>loading...</p>;
+  if (error) return <p>error</p>;
+  if (data) {
+    console.log(data);
+    return (
+      <div className="">
+        <UserContainer users={data.getAllUsers} />
+      </div>
+    );
+  }
 }
 
-export default App
+export default App;
